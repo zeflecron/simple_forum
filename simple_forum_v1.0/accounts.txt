@@ -1,0 +1,20 @@
+LIST OF ALL USERS
+1. zeflecron
+email = zet@zet.com
+password = zeflecron
+
+2. Gemylia
+email = 123@gmail.com
+password = 123123123
+
+3. johnjohn
+email = john@john.com
+password = johnjohn
+
+4. averylongname
+email = 1234@t.com
+password = thisisaweakpassword
+
+5. rule_breaker123
+email = x@y.com
+password = password

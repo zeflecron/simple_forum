@@ -1,0 +1,61 @@
+{% extends "layout.html" %}
+{% block content %}
+    <div class="container border border-primary rounded mt-2 p-2">
+        <div class="row">
+            <div class="col-sm-2 pt-2 pb-2">
+                <img class="rounded-circle users-img" src="{{ url_for('static', filename='prof_pics/' + user.prof_pic) }}">
+            </div>
+            <div class="col-sm-2 pt-2 pb-2">
+                <a class="text-info" href="{{ url_for('view_user', username=user.username) }}">{{ user.username }}</a>
+            </div>
+            <div class="col-sm-4 pt-2">
+                <p class="text-dark overflow-hidden">{{ user.description }}</p>
+            </div>
+            <div class="col-sm-2 pt-2 pb-2">
+                <small class="text-muted">Created: {{ user.date_created.strftime('%Y-%m-%d') }}</small><br>
+                <small class="text-muted">Posts: {{ user.posts|length }}</small>
+                <small class="text-muted">; Comments: {{ user.comments|length }}</small>
+            </div>
+            <div class="col-sm-1 pt-2 pb-2">
+                {% if user.role == 'member' %}
+                    <p class="text-success">{{ user.role }}</p>
+                {% else %}
+                    <p class="text-danger">{{ user.role }}</p>
+                {% endif %}
+            </div>
+        </div>
+        {% if posts.items|length < 1 %}
+            <div class="container border border-secondary border-3 rounded mt-2">
+                <p class="fs-4 text-center">This user doesn't have any posts yet</p>
+            </div>
+        {% endif %}
+        {% for post in posts.items %}
+            <div class="container border border-primary rounded mt-2">
+                <img class="rounded-circle home-img p-2" src="{{ url_for('static', filename='prof_pics/' + post.user_post.prof_pic) }}">
+                <a class="text-info" href="{{ url_for('view_user', username=post.user_post.username) }}">{{ post.user_post.username }}</a>
+                <small class="text-muted">{{ post.date_posted.strftime('%Y-%m-%d') }}</small>
+                {% if post.status == 'locked' %}
+                    <small class="text-danger">LOCKED</small>
+                {% endif %}
+                <p>Category:
+                    <a class="text-danger" href="{{ url_for('category', category=post.category) }}">{{ post.category }}</a>
+                </p>
+                <h2>
+                    <a class="text-primary overflow-hidden" href="{{ url_for('view_post', post_id=post.id) }}">{{ post.title }}</a>
+                </h2>
+                <p class="overflow-hidden">{{ post.content }}</p>
+            </div>
+        {% endfor %}
+        {% for page_num in posts.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+            {% if page_num %}
+                {% if posts.page == page_num %}
+                    <a class="btn btn-info mt-4 mb-4" href="{{ url_for('user_posts', username=user.username, page=page_num) }}">{{ page_num }}</a>
+                {% else %}
+                    <a class="btn btn-outline-info mt-4 mb-4" href="{{ url_for('user_posts', username=user.username, page=page_num) }}">{{ page_num }}</a>
+                {% endif %}
+            {% else %}
+                <span class="fs-1 text-info">...</span>
+            {% endif %}
+        {% endfor %}
+    </div>
+{% endblock content %}

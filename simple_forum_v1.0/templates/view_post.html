@@ -1,0 +1,74 @@
+{% extends "layout.html" %}
+{% block content %}
+    <div class="container">
+        <div class="container border border-primary border-3 rounded m-2">
+            <img class="rounded-circle home-img p-2" src="{{ url_for('static', filename='prof_pics/' + post.user_post.prof_pic) }}">
+            <a class="text-info" href="{{ url_for('view_user', username=post.user_post.username) }}">{{ post.user_post.username }}</a>
+            <small class="text-muted">{{ post.date_posted.strftime('%Y-%m-%d') }}</small>
+            {% if post.status == 'locked' %}
+                <small class="text-danger">LOCKED</small>
+            {% endif %}
+            <p>Category:
+                <a class="text-danger" href="{{ url_for('category', category=post.category) }}">{{ post.category }}</a>
+            </p>
+            <h2>
+                <a class="text-primary overflow-hidden" href="{{ url_for('view_post', post_id=post.id) }}">{{ post.title }}</a>
+            </h2>
+            <p class="overflow-hidden border-bottom pb-2">{{ post.content }}</p>
+            {% if post.user_post == current_user %}
+                <div>
+                    <a class="btn btn-warning btn-sm mb-2" href="{{ url_for('edit_post', post_id=post.id) }}">Edit</a>
+                    <button type="button" class="btn btn-danger btn-sm mb-2" data-bs-toggle="modal" data-bs-target="#deleteModal">Delete</button>
+                    {% if post.status == 'unlock' %}
+                        <a class="btn btn-secondary btn-sm mb-2" href="{{ url_for('lock_unlock_post', post_id=post.id) }}">Lock</a>
+                    {% else %}
+                        <a class="btn btn-success btn-sm mb-2" href="{{ url_for('lock_unlock_post', post_id=post.id) }}">Unlock</a>
+                    {% endif %}
+                 </div>
+            {% endif %}
+            {% if post.status == 'unlock' %}
+                <div>
+                    <a class="btn btn-info btn-sm mb-2" href="{{ url_for('new_comment', post_id=post.id) }}">Post a comment</a>
+                </div>
+            {% endif %}
+            {% for comment in comments.items %}
+                <div class="border-top mt-2">
+                    <img class="rounded-circle home-img p-2" src="{{ url_for('static', filename='prof_pics/' + comment.user_comment.prof_pic) }}">
+                    <a class="text-info" href="{{ url_for('view_user', username=comment.user_comment.username) }}">{{ comment.user_comment.username }}</a>
+                    <small class="text-muted">{{ comment.time_posted.strftime('%Y-%m-%d, %H:%M:%S') }}</small>
+                    <p class="overflow-hidden">{{ comment.content }}</p>
+                </div>
+            {% endfor %}
+            {% for page_num in comments.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+                {% if page_num %}
+                    {% if comments.page == page_num %}
+                        <a class="btn btn-info mb-4" href="{{ url_for('view_post', post_id=post.id, page=page_num) }}">{{ page_num }}</a>
+                    {% else %}
+                        <a class="btn btn-outline-info mb-4" href="{{ url_for('view_post', post_id=post.id, page=page_num) }}">{{ page_num }}</a>
+                    {% endif %}
+                {% else %}
+                    <span class="fs-1 text-info">...</span>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+      <!-- Modal -->
+    <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="deleteModalLabel">Delete Post?</h4>
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <form action="{{ url_for('delete_post', post_id=post.id) }}" method="POST">
+                        <input class="btn btn-danger" type="submit" value="Delete">
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

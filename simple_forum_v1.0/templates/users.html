@@ -1,0 +1,50 @@
+{% extends "layout.html" %}
+{% block content %}
+    <div class="container">
+        {% if users.items|length < 1 %}
+            <div class="container border border-secondary border-3 rounded mt-2">
+                <p class="fs-4 d-flex justify-content-center text-center">There are no posts yet, maybe create a new post!</p>
+            </div>
+        {% endif %}
+        {% for user in users.items %}
+            <div class="container border border-primary rounded mt-2 p-2">
+                <div class="row">
+                    <div class="col-sm-2 pt-2 pb-2">
+                        <img class="rounded-circle users-img" src="{{ url_for('static', filename='prof_pics/' + user.prof_pic) }}">
+                    </div>
+                    <div class="col-sm-2 pt-2 pb-2">
+                        <a class="text-info" href="{{ url_for('view_user', username=user.username) }}">{{ user.username }}</a>
+                    </div>
+                    <div class="col-sm-4 pt-2">
+                        <p class="text-dark overflow-hidden">{{ user.description }}</p>
+                    </div>
+                    <div class="col-sm-2 pt-2 pb-2">
+                        <small class="text-muted">Created: {{ user.date_created.strftime('%Y-%m-%d') }}</small><br>
+                        <small class="text-muted">Posts: {{ user.posts|length }}</small>
+                        <small class="text-muted">; Comments: {{ user.comments|length }}</small>
+                    </div>
+                    <div class="col-sm-1 pt-2 pb-2">
+                        {% if user.role == 'member' %}
+                            <p class="text-success fw-bold">{{ user.role }}</p>
+                        {% elif user.role == 'admin' %}
+                            <p class="text-primary fw-bold">{{ user.role }}</p>
+                        {% else %}
+                            <p class="text-danger fw-bold">{{ user.role }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        {% for page_num in users.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+            {% if page_num %}
+                {% if users.page == page_num %}
+                    <a class="btn btn-info mt-4 mb-4" href="{{ url_for('users', page=page_num) }}">{{ page_num }}</a>
+                {% else %}
+                    <a class="btn btn-outline-info mt-4 mb-4" href="{{ url_for('users', page=page_num) }}">{{ page_num }}</a>
+                {% endif %}
+            {% else %}
+                <span class="fs-1 text-info">...</span>
+            {% endif %}
+        {% endfor %}
+    </div>
+{% endblock content %}

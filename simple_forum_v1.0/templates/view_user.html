@@ -1,0 +1,42 @@
+{% extends "layout.html" %}
+{% block content %}
+    <div class="container border border-primary rounded mt-2 p-2">
+        <div class="row">
+            <div class="col-sm-2 pt-2 pb-2">
+                <img class="rounded-circle users-img" src="{{ url_for('static', filename='prof_pics/' + user.prof_pic) }}">
+            </div>
+            <div class="col-sm-2 pt-2 pb-2">
+                <a class="text-info" href="{{ url_for('view_user', username=user.username) }}">{{ user.username }}</a>
+            </div>
+            <div class="col-sm-4 pt-2">
+                <p class="text-dark overflow-hidden">{{ user.description }}</p>
+            </div>
+            <div class="col-sm-2 pt-2 pb-2">
+                <small class="text-muted">Created: {{ user.date_created.strftime('%Y-%m-%d') }}</small><br>
+                <small class="text-muted">Posts: {{ user.posts|length }}</small>
+                <small class="text-muted">; Comments: {{ user.comments|length }}</small>
+            </div>
+            <div class="col-sm-1 pt-2 pb-2">
+                {% if user.role == 'member' %}
+                    <p class="text-success">{{ user.role }}</p>
+                {% else %}
+                    <p class="text-danger">{{ user.role }}</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm">
+                <div class="container mt-2">
+                    <a class="btn btn-info mb-4 fs-4 d-flex justify-content-center text-center" href="{{ url_for('user_posts', username=user.username) }}">View user's posts</a>
+                </div>
+            </div>
+            <div class="col-sm">
+                <div class="container mt-2">
+                    <a class="btn btn-info mb-4 fs-4 d-flex justify-content-center text-center" href="{{ url_for('user_comments', username=user.username) }}">View user's comments</a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}
