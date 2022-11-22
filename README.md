@@ -12,5 +12,6 @@ Simple Forum using Python Flask and Bootstrap CSS
 6. There should be a clickable IP in the IDE, or simply go to any web browser and type in `127.0.0.1:5000`
 
 ## Additional info
-1. See `accounts.txt` for all the available users
-2. Go to `/admin` to go into admin panel, make sure the logged in user is admin or else it will return a 403
+1. Uses Python 3.9
+2. See `accounts.txt` for all the available users
+3. Go to `/admin` to go into admin panel, make sure the logged in user is admin or else it will return a 403
