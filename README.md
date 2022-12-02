@@ -1,6 +1,11 @@
 # Simple Forum
 Simple Forum using Python Flask and Bootstrap CSS
 
+## Features
+- Uses login mixer for the user authentication
+- Cascades database that are related to one another when a (when a post is deleted, all comments are too)
+- An admin role that can access an admin page and change every single part of the database to a desired one
+
 # How to run it (explanation for windows only):
 1. Download, extract, and open simple_forum_v1.0+
 2. Create a virtual environment in the directory using cmd: `python -m venv venv`
